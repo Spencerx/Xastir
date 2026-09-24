@@ -694,10 +694,10 @@ AC_LANG_POP([C])
 
 #
 AC_DEFUN([XASTIR_PATH_MOTIF], [
-# New stuff to check for Motif/Lesstif.  Shamelessly borrowed from
+# New stuff to check for Motif.  Shamelessly borrowed from
 # the opendx project. Opendx in turn snarfed their test from AC_PATH_X.
 
-# Allow "--with-motif-includes" and "--with-motif-libs" so user can 
+# Allow "--with-motif-includes" and "--with-motif-libs" so user can
 # force a specific set of includes.
 AC_ARG_WITH(motif-includes, [  --with-motif-includes     Set path for motif includes (default none)],[with_motif_includes=$withval], [with_motif_includes=])
 if test "$with_motif_includes" != "yes" && test -z "$with_motif_includes"

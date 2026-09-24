@@ -42,7 +42,7 @@ The packages you absolutely must have in order to build Xastir are:
 * automake
 * gcc and all of its development headers
 * glibc and its development headers
-* openmotif or lesstiff and its development headers
+* openmotif and its development headers
 * the X11 window system and X development headers
 * make
 * git

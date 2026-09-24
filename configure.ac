@@ -301,18 +301,13 @@ fi
 AC_CHECK_LIB(compat, main, 
     [LIBCOMPAT="-lcompat"
     AC_SUBST(LIBCOMPAT)])
- 
+
 # Check for sched_yield in librt (Needed for Solaris)
 AC_CHECK_LIB(rt, sched_yield, LIBS="-lrt $LIBS")
- 
-# Check for endian 
-AC_C_BIGENDIAN 
- 
 
+# Check for endian
+AC_C_BIGENDIAN
 
-# Our old stuff.  Doesn't work in all cases.
-# Checks for header files. 
-#AC_CHECK_HEADERS([Xm/Xm.h],MOTIF_INC="yes", AC_MSG_ERROR(*** Cannot find Motif include files:  Please install one of Motif/OpenMotif/Lesstif development packages. ***))
 
 XASTIR_PATH_MOTIF
 if test "x$xm_includes" != "x" ; then
