@@ -46,11 +46,6 @@
 
 extern XmFontList fontlist1;    // Menu/System fontlist
 
-#if defined(LESSTIF_VERSION)
-  #define NO_DYNAMIC_WIDGETS 1
-#endif
-
-
 #define MAX_PATH 200
 
 
@@ -133,7 +128,6 @@ void reverse_path(char *input_string)
     if (input_string[i] == ',')
     {
       indexes[j++] = i;
-      //fprintf(stderr,"%d\n",i);     // Debug code
     }
   }
 
@@ -154,15 +148,10 @@ void reverse_path(char *input_string)
   {
     char *c = &input_string[indexes[i] + 1];
 
-//fprintf(stderr,"'%s'\t", c );
-
     if (c[0] == 'q')
     {
       if ( strlen(c) == 3 )   // "qAR"
       {
-
-//fprintf(stderr,"Found:%s\n", c);
-
         j = i;
       }
     }
@@ -202,7 +191,6 @@ void reverse_path(char *input_string)
       {
         if ( (temp[4] != ',') && is_num_chr(temp[4]) )
         {
-//fprintf(stderr,"Found a WIDEn-N\n");
           xastir_snprintf(temp,
                           sizeof(temp),
                           "WIDE%c-%c",
@@ -211,7 +199,6 @@ void reverse_path(char *input_string)
         }
         else
         {
-//fprintf(stderr,"Found a WIDE\n");
           // Leave temp alone, it's just a WIDE
         }
       }
@@ -219,7 +206,6 @@ void reverse_path(char *input_string)
       {
         if ( (temp[5] != ',') && is_num_chr(temp[5]) )
         {
-//fprintf(stderr,"Found a TRACEn-N\n");
           xastir_snprintf(temp,
                           sizeof(temp),
                           "WIDE%c-%c",
@@ -228,7 +214,6 @@ void reverse_path(char *input_string)
         }
         else
         {
-//fprintf(stderr,"Found a TRACE\n");
           // Convert it from TRACE to WIDE
           xastir_snprintf(temp,
                           sizeof(temp),
@@ -827,7 +812,6 @@ void get_send_message_path(char *callsign, char *path, int path_size)
   xastir_snprintf(my_callsign,sizeof(my_callsign),"%s",callsign);
   remove_trailing_spaces(my_callsign);
 
-//fprintf(stderr,"Looking for %s\n", my_callsign);
   for(ii = 0; ii < MAX_MESSAGE_WINDOWS; ii++)
   {
 
@@ -855,7 +839,6 @@ void get_send_message_path(char *callsign, char *path, int path_size)
 
   if (found == -1)
   {
-//fprintf(stderr,"Didn't find dialog\n");
     path[0] = '\0';
     return;
   }
@@ -876,7 +859,6 @@ void get_send_message_path(char *callsign, char *path, int path_size)
   // Path empty?
   if (temp1[0] == '\0')
   {
-//fprintf(stderr,"Didn't find custom path\n");
     path[0] = '\0';
     return;
   }
@@ -886,7 +868,6 @@ void get_send_message_path(char *callsign, char *path, int path_size)
                   path_size,
                   "%s",
                   temp1);
-//fprintf(stderr,"Found custom path: %s\n", path);
 }
 
 
@@ -896,11 +877,6 @@ void get_send_message_path(char *callsign, char *path, int path_size)
 void Send_message_destroy_shell( Widget UNUSED(widget), XtPointer clientData, XtPointer UNUSED(callData))
 {
   int ii;
-//    char *temp_ptr;
-//    char temp1[MAX_LINE_SIZE+1];
-
-//fprintf(stderr,"3Send_message_destroy_shell() start\n");
-
   ii=atoi((char *)clientData);
 
   begin_critical_section(&send_message_dialog_lock, "messages_gui.c:Send_message_destroy_shell" );
@@ -951,8 +927,6 @@ void Send_message_destroy_shell( Widget UNUSED(widget), XtPointer clientData, Xt
   Send_message_change_path_destroy_shell(NULL, NULL, NULL);
 
   end_critical_section(&send_message_dialog_lock, "messages_gui.c:Send_message_destroy_shell" );
-
-//fprintf(stderr,"3Send_message_destroy_shell() finished\n");
 
 }
 
@@ -1017,11 +991,9 @@ void Send_message_now( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(
   char temp2[121];
   char temp_line1[68] = "";
 
-#ifndef NO_DYNAMIC_WIDGETS
   char temp_line2[23] = "";
   char temp_line3[23] = "";
   char temp_line4[10] = "";
-#endif    // NO_DYNAMIC_WIDGETS
 
   char path[200];
   int ii, jj;
@@ -1062,7 +1034,6 @@ void Send_message_now( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(
                     temp_ptr);
     XtFree(temp_ptr);
 
-#ifndef NO_DYNAMIC_WIDGETS
 
     // If D700/D7 mode, fetch message_data_line2
     if (d700 || d7)
@@ -1126,9 +1097,6 @@ void Send_message_now( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(
                       temp_line4);
     }
     else
-
-#endif  // NO_DYNAMIC_WIDGETS 
-
     {
       // Use line1 only
       xastir_snprintf(temp2,
@@ -1184,10 +1152,6 @@ void Send_message_now( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(
       XmToggleButtonSetState(auto_msg_toggle,FALSE,FALSE);
       statusline(langcode("BBARSTA011"),0);       // Auto Reply Messages OFF
       output_message(mw[ii].to_call_sign,temp1,temp2,path);
-
-//fprintf(stderr,"         1111111111222222222233333333334444444444555555555566666666\n");
-//fprintf(stderr,"1234567890123456789012345678901234567890123456789012345678901234567\n");
-//fprintf(stderr,"%s\n",temp2);
 
       XmTextFieldSetString(mw[ii].message_data_line1,"");
 
@@ -1481,15 +1445,6 @@ void Send_message_now_4( Widget w, XtPointer clientData, XtPointer callData)
 void build_send_message_input_boxes(int i, int hamhud, int d700, int d7)
 {
 
-//fprintf(stderr, "\n  build:   i:%d  hamhud:%d  d700:%d  d7:%d\n", i, hamhud, d700, d7);
-
-
-// Skip most of these sections and go to the default section if
-// using LSB.  We have problems with Lesstif segfaulting on us
-// otherwise.
-
-#ifndef NO_DYNAMIC_WIDGETS
-
   // HamHUD mode (Here we're assuming the 4x20 LCD in the HamHUD-II)
   if (hamhud)
   {
@@ -1740,9 +1695,6 @@ void build_send_message_input_boxes(int i, int hamhud, int d700, int d7)
 
   // Standard APRS Mode
   else // Standard APRS message box size (67)
-
-#endif  // NO_DYNAMIC_WIDGETS
-
   {
 
     mw[i].message_data_line1 = XtVaCreateManagedWidget("Send_message smmd",
@@ -1770,10 +1722,6 @@ void build_send_message_input_boxes(int i, int hamhud, int d700, int d7)
                                NULL);
   }
 
-
-//fprintf(stderr,"Starting to add callbacks\n");
-
-
   if (mw[i].message_data_line1) // If exists, add another callback
   {
     XtAddCallback(mw[i].message_data_line1, XmNactivateCallback, Send_message_now_1, (XtPointer)mw[i].win);
@@ -1794,8 +1742,6 @@ void build_send_message_input_boxes(int i, int hamhud, int d700, int d7)
     XtAddCallback(mw[i].message_data_line4, XmNactivateCallback, Send_message_now_4, (XtPointer)mw[i].win);
   }
 
-//fprintf(stderr,"Exiting build_send_message_input_boxes()\n");
-
 }
 
 
@@ -1804,20 +1750,6 @@ void build_send_message_input_boxes(int i, int hamhud, int d700, int d7)
 
 void rebuild_send_message_input_boxes(int ii, int hamhud, int d700, int d7)
 {
-
-//fprintf(stderr, "\nrebuild:  ii:%d  hamhud:%d  d700:%d  d7:%d\n", ii, hamhud, d700, d7);
-
-
-// Lesstif appears to have a problem with removing/adding widgets to
-// a dialog that's already been created and will segfault in this
-// case.  In order to make LSB-Xastir more reliable we disable the
-// dynamically-created widget code here and stick with the default
-// setup (one long TextField widget for input).
-//
-// Perhaps we need to do a Lesstif detect and do the same thing
-// anytime Lesstif is used as well?
-
-#ifndef NO_DYNAMIC_WIDGETS
 
   // Remove the current message widgets
   if (mw[ii].message_data_line4)
@@ -1849,8 +1781,6 @@ void rebuild_send_message_input_boxes(int ii, int hamhud, int d700, int d7)
 
   // Build the new boxes
   build_send_message_input_boxes(ii, hamhud, d700, d7);
-
-#endif  // NO_DYNAMIC_WIDGETS
 
 }
 
@@ -1956,21 +1886,6 @@ void select_station_type(int ii)
     int hamhud = 0;
     int d700 = 0;
     int d7 = 0;
-//        int tx_only = 0;
-
-
-//fprintf(stderr,"Found callsign: %s\n", call_sign);
-
-    // check if station appears to be a transmit only station such as the TinyTrak and OpenTrak trackers.
-// ********* wrong test **********
-//if (p_station->aprs_symbol != NULL) {
-//   if (p_station->aprs_symbol.aprs_type != NULL) {
-//      fprintf(stderr,"Has Type: %s\n", p_station->aprs_symbol.aprs_type);
-//        if is_tx_only(p_station) {
-//            tx_only++;
-//        }
-//   }
-//}
 
     // Check first two comment records, if they exist
     if (p_station->comment_data != NULL)
@@ -2094,8 +2009,6 @@ void Send_message( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(call
   int box_len;
   Atom delw;
 
-
-//fprintf(stderr,"\n1Send_message\n");
 
   groupon=0;
   box_len=105;
@@ -2299,11 +2212,7 @@ void Send_message( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(call
                                            MY_BACKGROUND_COLOR,
                                            XmNfontList, fontlist1,
                                            NULL);
-#ifndef NO_DYNAMIC_WIDGETS
     XtAddCallback(mw[i].D7_mode,XmNvalueChangedCallback,D7_Msg,(XtPointer)i);
-#else   // NO_DYNAMIC_WIDGETS
-    XtSetSensitive(mw[i].D7_mode, FALSE);
-#endif  // NO_DYNAMIC_WIDGETS
 
     mw[i].D700_mode =XtVaCreateManagedWidget("D700",
                      xmToggleButtonGadgetClass,
@@ -2324,11 +2233,7 @@ void Send_message( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(call
                      XmNfontList, fontlist1,
                      NULL);
 
-#ifndef NO_DYNAMIC_WIDGETS
     XtAddCallback(mw[i].D700_mode,XmNvalueChangedCallback,D700_Msg,(XtPointer)i);
-#else   // NO_DYNAMIC_WIDGETS
-    XtSetSensitive(mw[i].D700_mode, FALSE);
-#endif  // NO_DYNAMIC_WIDGETS
 
     mw[i].HamHUD_mode =XtVaCreateManagedWidget("HamHUD",
                        xmToggleButtonGadgetClass,
@@ -2349,11 +2254,7 @@ void Send_message( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(call
                        XmNfontList, fontlist1,
                        NULL);
 
-#ifndef NO_DYNAMIC_WIDGETS
     XtAddCallback(mw[i].HamHUD_mode,XmNvalueChangedCallback,HamHUD_Msg,(XtPointer)i);
-#else   // NO_DYNAMIC_WIDGETS
-    XtSetSensitive(mw[i].HamHUD_mode, FALSE);
-#endif  // NO_DYNAMIC_WIDGETS
 
     mw[i].message = XtVaCreateManagedWidget(langcode("WPUPMSB008"),
                                             xmLabelWidgetClass,
@@ -2604,14 +2505,10 @@ void Send_message( Widget UNUSED(w), XtPointer clientData, XtPointer UNUSED(call
 
   }
 
-//fprintf(stderr,"2calling select_station_type()\n");
 
   // Re-arrange the outgoing message boxes based on the type of
   // device we're talking to.
   select_station_type(i);
-
-//fprintf(stderr,"2returned from select_station_type()\n");
-//fprintf(stderr,"1end of Send_message()\n");
 
   end_critical_section(&send_message_dialog_lock, "messages_gui.c:Send_message" );
 

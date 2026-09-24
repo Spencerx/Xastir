@@ -636,17 +636,6 @@ We are required to state that
 -------------------------------
 -------------------------------
 
-
-*) Lesstif (<http://www.lesstif.org/>) is available under the
-following license.  Note that this license is only applicable to a
-distributed Xastir BINARY which includes this library:
-
-The included files COPYING and COPYING.LIB.LESSTIF, as may apply.
-
--------------------------------
--------------------------------
-
-
 *) libpng (<http://www.libpng.org/pub/png/libpng.html>) is available
 under the following license.  Note that this license is only
 applicable to a distributed Xastir BINARY which includes this

@@ -21,7 +21,7 @@ EXTRA_DIST = config.guess config.sub install-sh \
         Davis LaCrosse \
         OSM_template \
         CC_OpenStreetMap_logo.png CC_OpenStreetMap_txt.png \
-        COPYING COPYING.LIB.LESSTIF AUTHORS NaturalEarthVector
+        COPYING AUTHORS NaturalEarthVector
 
 MAINTAINERCLEANFILES = configure aclocal.m4 Makefile.in Makefile \
         config.guess config.sub install-sh missing mkinstalldirs
@@ -54,14 +54,13 @@ sound_DATA=placeholder
 docdir=@docdir@
 doc_DATA=AUTHORS FAQ ChangeLog LICENSE README README.GIT.md README.CYGWIN \
         README.MAPS README.sudo COPYING INSTALL.md \
-        README.OSM_maps CONTRIBUTING.md \
-        COPYING.LIB.LESSTIF
+        README.OSM_maps CONTRIBUTING.md
 
 install-data-hook:
 	cd $(DESTDIR)$(mapdir) && \
 	rm -f CC_OpenStreetMap.png && \
 	$(LN_S) CC_OpenStreetMap_logo.png CC_OpenStreetMap.png
- 
+
 mandir=@mandir@
 man_MANS=xastir.1 callpass.1 xastir_udp_client.1 testdbfawk.1
 
